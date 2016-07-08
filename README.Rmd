@@ -1,0 +1,32 @@
+---
+title: "SparklingWater for R"
+output: github_document
+---
+
+
+Connect to Spark, using the SparklingWater extension:
+
+```{r setup, message=FALSE}
+library(SparklingWater)
+library(sparklyr)
+library(dplyr)
+sc <- spark_connect(master = "local", extensions = "SparklingWater")
+```
+
+Copy the mtcars dataset to to Spark:
+
+```{r}
+mtcars_tbl <- copy_to(sc, mtcars)
+mtcars_tbl
+```
+
+Convert the Spark DataFrame to an H2OFrame:
+
+```{r}
+mtcars_hf <- h2o_frame(mtcars_tbl)
+mtcars_hf
+```
+
+
+
+
