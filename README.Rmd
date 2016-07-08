@@ -3,29 +3,62 @@ title: "SparklingWater for R"
 output: github_document
 ---
 
+This is a proof of concept extension package for [sparkapi](https://github.com/rstudio/sparkapi) / [sparklyr](http://spark.rstudio.com) that demonstrates creating an R front-end for a Spark package (in this case [SparkingWater](https://spark-packages.org/package/h2oai/sparkling-water) from H2O). 
 
-Connect to Spark, using the SparklingWater extension:
+This package implements only the most basic functionality (creating an H2OContext, showing the H2O Flow interface, and converting a Spark DataFrame to an H2O Frame). Note that the package won't be developed further since it's just a demonstration.
+
+## Connecting to Spark
+
+First we connect to Spark. The call to `library(SparkingWater)` will make the H2O functions available on the R search path and will also ensure that the dependencies required by the SparklingWater package are included when we connect to Spark.
 
 ```{r setup, message=FALSE}
 library(SparklingWater)
 library(sparklyr)
 library(dplyr)
-sc <- spark_connect(master = "local", extensions = "SparklingWater")
+sc <- spark_connect(master = "local")
 ```
 
-Copy the mtcars dataset to to Spark:
+## H2O Context and Flow
+
+The call to `library(SparkingWater)` automatically registered the SparklingWater extension, which in turn specified that the [SparklingWater Spark package](https://spark-packages.org/package/h2oai/sparkling-water) should be made available for Spark connections. Let's inspect the H2OContext for our Spark connection:
 
 ```{r}
-mtcars_tbl <- copy_to(sc, mtcars)
+h2o_context(sc)
+```
+
+We can also view the H2O Flow web UI:
+
+```{r, eval=FALSE}
+h2o_flow(sc)
+```
+
+## H2O with Spark DataFrames
+
+Let's copy the mtcars dataset to to Spark so we can access it from SparklingWater:
+
+```{r}
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
 mtcars_tbl
 ```
 
-Convert the Spark DataFrame to an H2OFrame:
+The use case we'd like to enable is calling the H2O algorithms and feature transformers directly on Spark DataFrames that we've manipulated with dplyr. This is indeed supported by the SparklingWater package. Here though we'll just convert the Spark DataFrame into an H2O Frame to prove that it's possible:
 
 ```{r}
 mtcars_hf <- h2o_frame(mtcars_tbl)
 mtcars_hf
 ```
+
+Now we disconnect from Spark, this will result in the H2OContext being stopped as well since it's owned by the spark shell process used by our Spark connection:
+
+```{r}
+spark_disconnect(sc)
+```
+
+
+
+
+
+
 
 
 

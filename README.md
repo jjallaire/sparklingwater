@@ -1,19 +1,59 @@
 SparklingWater for R
 ================
 
-Connect to Spark, using the SparklingWater extension
+This is a proof of concept extension package for [sparkapi](https://github.com/rstudio/sparkapi) / [sparklyr](http://spark.rstudio.com) that demonstrates creating an R front-end for a Spark package (in this case [SparkingWater](https://spark-packages.org/package/h2oai/sparkling-water) from H2O).
+
+This package implements only the most basic functionality (creating an H2OContext, showing the H2O Flow interface, and converting a Spark DataFrame to an H2O Frame). Note that the package won't be developed further since it's just a demonstration.
+
+Connecting to Spark
+-------------------
+
+First we connect to Spark. The call to `library(SparkingWater)` will make the H2O functions available on the R search path and will also ensure that the dependencies required by the SparklingWater package are included when we connect to Spark.
 
 ``` r
 library(SparklingWater)
 library(sparklyr)
 library(dplyr)
-sc <- spark_connect(master = "local", extensions = "SparklingWater")
+sc <- spark_connect(master = "local")
 ```
 
-Copy the mtcars dataset to to Spark:
+H2O Context and Flow
+--------------------
+
+The call to `library(SparkingWater)` automatically registered the SparklingWater extension, which in turn specified that the [SparklingWater Spark package](https://spark-packages.org/package/h2oai/sparkling-water) should be made available for Spark connections. Let's inspect the H2OContext for our Spark connection:
 
 ``` r
-mtcars_tbl <- copy_to(sc, mtcars)
+h2o_context(sc)
+```
+
+    ## <jobj[6]>
+    ##   class org.apache.spark.h2o.H2OContext
+    ##   
+    ## Sparkling Water Context:
+    ##  * H2O name: sparkling-water-jjallaire_1911110445
+    ##  * number of executors: 1
+    ##  * list of used executors:
+    ##   (executorId, host, port)
+    ##   ------------------------
+    ##   (driver,localhost,54321)
+    ##   ------------------------
+    ## 
+    ##   Open H2O Flow in browser: http://127.0.0.1:54321 (CMD + click in Mac OSX)
+    ## 
+
+We can also view the H2O Flow web UI:
+
+``` r
+h2o_flow(sc)
+```
+
+H2O with Spark DataFrames
+-------------------------
+
+Let's copy the mtcars dataset to to Spark so we can access it from SparklingWater:
+
+``` r
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
 mtcars_tbl
 ```
 
@@ -34,16 +74,16 @@ mtcars_tbl
     ## 10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4
     ## # ... with more rows
 
-Convert the Spark DataFrame to an H2OFrame:
+The use case we'd like to enable is calling the H2O algorithms and feature transformers directly on Spark DataFrames that we've manipulated with dplyr. This is indeed supported by the SparklingWater package. Here though we'll just convert the Spark DataFrame into an H2O Frame to prove that it's possible:
 
 ``` r
 mtcars_hf <- h2o_frame(mtcars_tbl)
 mtcars_hf
 ```
 
-    ## <jobj[93]>
+    ## <jobj[103]>
     ##   class water.fvec.H2OFrame
-    ##   Frame frame_rdd_35 (32 rows and 11 cols):
+    ##   Frame frame_rdd_39 (32 rows and 11 cols):
     ##                        mpg  cyl                disp   hp                drat                  wt                qsec  vs  am  gear  carb
     ##     min               10.4    4                71.1   52                2.76               1.513                14.5   0   0     3     1
     ##    mean          20.090625    6          230.721875  146           3.5965625             3.21725  17.848750000000003   0   0     3     2
@@ -70,3 +110,9 @@ mtcars_hf
     ##      17               32.4    4                78.7   66                4.08                 2.2               19.47   1   1     4     1
     ##      18               30.4    4                75.7   52                4.93               1.615               18.52   1   1     4     2
     ##      19               33.9    4                71.1   65                4.22               1.835                19.9   1   1     4     1
+
+Now we disconnect from Spark, this will result in the H2OContext being stopped as well since it's owned by the spark shell process used by our Spark connection:
+
+``` r
+spark_disconnect(sc)
+```

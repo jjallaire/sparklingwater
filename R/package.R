@@ -8,3 +8,7 @@ spark_dependencies <- function(...) {
                                 "ai.h2o:sparkling-water-ml_2.10:1.6.5"))
 }
 
+.onLoad <- function(libname, pkgname) {
+  sparkapi::register_extension(pkgname)
+}
+
