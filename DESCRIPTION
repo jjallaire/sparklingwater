@@ -1,4 +1,4 @@
-Package: SparklingWater
+Package: sparklingwater
 Type: Package
 Title: R Interface for H2O SparkingWater
 Version: 0.1.0
