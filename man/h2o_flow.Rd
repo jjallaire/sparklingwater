@@ -6,9 +6,6 @@
 \usage{
 h2o_flow(sc)
 }
-\arguments{
-\item{sc}{A \code{spark_connection}}
-}
 \description{
 Open the H2O Flow UI in a browser
 }

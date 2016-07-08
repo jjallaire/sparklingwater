@@ -29,15 +29,15 @@ h2o_context(sc)
     ##   class org.apache.spark.h2o.H2OContext
     ##   
     ## Sparkling Water Context:
-    ##  * H2O name: sparkling-water-jjallaire_742034
+    ##  * H2O name: sparkling-water-jjallaire_-1482215501
     ##  * number of executors: 1
     ##  * list of used executors:
     ##   (executorId, host, port)
     ##   ------------------------
-    ##   (driver,localhost,54321)
+    ##   (driver,localhost,54323)
     ##   ------------------------
     ## 
-    ##   Open H2O Flow in browser: http://127.0.0.1:54321 (CMD + click in Mac OSX)
+    ##   Open H2O Flow in browser: http://127.0.0.1:54323 (CMD + click in Mac OSX)
     ## 
 
 We can also view the H2O Flow web UI:
