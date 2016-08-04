@@ -1,5 +1,5 @@
 
-#' @import sparkapi
+#' @import sparklyr
 NULL
 
 # define required spark packages
@@ -11,6 +11,6 @@ spark_dependencies <- function(spark_version, scala_version, ...) {
 }
 
 .onLoad <- function(libname, pkgname) {
-  sparkapi::register_extension(pkgname)
+  sparklyr::register_extension(pkgname)
 }
 

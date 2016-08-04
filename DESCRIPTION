@@ -7,7 +7,7 @@ Authors@R: c(
   person(family = "RStudio", role = c("cph")))
 Imports:
   utils,
-  sparkapi (>= 0.3.12)
+  sparklyr (>= 0.3)
 Description: A proof of concept extension package for sparklyr that demonstrates
   creating a front-end for a Spark package (in this case SparkingWater from H2O).
 License: file LICENSE

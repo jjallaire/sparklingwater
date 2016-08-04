@@ -3,7 +3,7 @@ title: "Sparkling Water for R"
 output: github_document
 ---
 
-This is a proof of concept extension package for [sparkapi](https://github.com/rstudio/sparkapi) / [sparklyr](http://spark.rstudio.com) that demonstrates creating an R front-end for a Spark package (in this case [Sparking Water](https://spark-packages.org/package/h2oai/sparkling-water) from H2O). 
+This is a proof of concept extension package for [sparklyr](http://spark.rstudio.com) that demonstrates creating an R front-end for a Spark package (in this case [Sparking Water](https://spark-packages.org/package/h2oai/sparkling-water) from H2O). 
 
 This package implements only the most basic functionality (creating an H2OContext, showing the H2O Flow interface, and converting a Spark DataFrame to an H2O Frame). Note that the package won't be developed further since it's just a demonstration.
 
